@@ -13,7 +13,11 @@ public class DropOnFastLift : MonoBehaviour
     private InteractableFacade interactable;
     private Rigidbody interactableRigidbody;
 
-    void Start()
+    private bool startPositionSet = false;
+    private Vector3 startPosition;
+    private bool isOutsideOriginLimit = false;
+
+    void Awake()
     {
         interactable = GetComponentInChildren<InteractableFacade>();
         Debug.Log("interactabler: " + interactable);
@@ -24,28 +28,44 @@ public class DropOnFastLift : MonoBehaviour
 
     void FixedUpdate()
     {
+
         if (interactable && interactable.IsGrabbed)
         {
-            Debug.Log("Rigidbody velocity: " + interactableRigidbody.velocity);
-            // Get the list of grabbing interactors
-            IReadOnlyList<InteractorFacade> grabbingInteractors = interactable.GrabbingInteractors;
-            // Iterate through the grabbing interactors to see if any of them are moving too fast
-            foreach (InteractorFacade interactor in grabbingInteractors)
-            {
-                // Get the VelocityTrackerProcessor from the interactor's parent game object
-                VelocityTrackerProcessor velocityTrackerProcessor = interactor.transform.parent.gameObject.GetComponent<VelocityTrackerProcessor>();
-                // Get the current velocity from the VelocityTrackerProcessor
-                Vector3 currentVelocity = velocityTrackerProcessor.GetVelocity();
-                // Get the current velocity magnitude from the current velocity
-                float currentVelocityMagnitude = currentVelocity.magnitude;
-                Debug.Log("current velocity magnitude: " + currentVelocityMagnitude);
-                // If the current velocity magnitude is greater than the max velocity, ungrab the interactable
-                if (currentVelocityMagnitude > maxVelocity) {
-                    // interactable.Ungrab(interactor);
-                    interactor.Ungrab();
-                    break;
-                }
+            if (!startPositionSet) {
+                Debug.Log("Setting start position...");
+                startPosition = transform.position;
+                Debug.Log("Start position: " + startPosition);
+                startPositionSet = true;
             }
+
+            // Check if the weight is outside the origin position limits where the weight cannot be dropped
+            //if (isOutsideOriginLimit) {
+                // Get the list of grabbing interactors
+                IReadOnlyList<InteractorFacade> grabbingInteractors = interactable.GrabbingInteractors;
+                // Iterate through the grabbing interactors to see if any of them are moving too fast
+                foreach (InteractorFacade interactor in grabbingInteractors)
+                {
+                    // Get the VelocityTrackerProcessor from the interactor's parent game object
+                    VelocityTrackerProcessor velocityTrackerProcessor = interactor.transform.parent.gameObject.GetComponent<VelocityTrackerProcessor>();
+                    // Get the current velocity from the VelocityTrackerProcessor
+                    Vector3 currentVelocity = velocityTrackerProcessor.GetVelocity();
+                    // Get the current velocity magnitude from the current velocity
+                    float currentVelocityMagnitude = currentVelocity.magnitude;
+                    Debug.Log("current velocity magnitude: " + currentVelocityMagnitude);
+                    // If the current velocity magnitude is greater than the max velocity, ungrab the interactable
+                    if (currentVelocityMagnitude > maxVelocity) {
+                        // interactable.Ungrab(interactor);
+                        interactor.Ungrab();
+                        startPositionSet = false;
+                        isOutsideOriginLimit = false;
+                        break;
+                    }
+                }
+            // } else {
+            //     Debug.Log("IN ELSE: checking distance from origin...");
+            //     CheckDistanceFromOrigin();
+            // }
+
         }
     }
 
@@ -66,5 +86,18 @@ public class DropOnFastLift : MonoBehaviour
             //speedLimit = (-1.8f * interactableRigidbody.mass + 3.6f);
         }
         Debug.Log("max velocity: " + maxVelocity);
+    }
+
+    private void CalculateAngularDrag() {
+        interactableRigidbody.angularDrag = (0.5f * (interactableRigidbody.mass*interactableRigidbody.mass));
+    }
+
+    private void CheckDistanceFromOrigin() {
+        Vector3 distance = transform.position - startPosition;
+        Debug.Log("distance: " + distance);
+        if (distance.y > 0.5f && Mathf.Abs(distance.x) < 0.1f && Mathf.Abs(distance.z) < 0.1f) {
+            Debug.Log("outside origin limit");
+            isOutsideOriginLimit = true;
+        }
     }
 }

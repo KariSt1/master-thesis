@@ -49,11 +49,11 @@ public class DropOnFastLift : MonoBehaviour
                     VelocityTrackerProcessor velocityTrackerProcessor = interactor.transform.parent.gameObject.GetComponent<VelocityTrackerProcessor>();
                     // Get the current velocity from the VelocityTrackerProcessor
                     Vector3 currentVelocity = velocityTrackerProcessor.GetVelocity();
-                    // Get the current velocity magnitude from the current velocity
-                    float currentVelocityMagnitude = currentVelocity.magnitude;
-                    Debug.Log("current velocity magnitude: " + currentVelocityMagnitude);
-                    // If the current velocity magnitude is greater than the max velocity, ungrab the interactable
-                    if (currentVelocityMagnitude > maxVelocity) {
+                    // Get the current velocity magnitude y value from the current velocity
+                    float currentVelocityYMagnitude = currentVelocity.y;
+                    // If the current velocity y magnitude is greater than the max velocity, ungrab the interactable
+                    // Positive velocity only happens on the way up, so you cannot drop it while going down
+                    if (currentVelocityYMagnitude > maxVelocity) {
                         // interactable.Ungrab(interactor);
                         interactor.Ungrab();
                         startPositionSet = false;

@@ -1,27 +1,72 @@
 using UnityEngine;
+using Tilia.Interactions.Interactables.Interactables;
 using Tilia.Interactions.Interactables.Interactors;
+using Zinnia.Tracking.Velocity;
+using System.Collections.Generic;
 
 public class HandMovement : MonoBehaviour
 {
-    public InteractorFacade controller;
+    // The transform of the real life controller
+    public Transform controllerTransform;
+    // The transform of the virtual hand
+    public Transform handTransform;
+    // The C/D ratio
     public float movementRatio = 1f;
+    // Velocity tracker processor to get the velocity of the controller
+    public VelocityTrackerProcessor velocityTrackerProcessor;
+    // Interactor facade to get the grabbed objects
+    public InteractorFacade interactorFacade;
 
+    // The initial position of the hand
     private Vector3 initialPosition;
+    // The last velocity of the controller
+    private Vector3 lastVelocity;
+    // The current position of the virtual hand
+    private Vector3 handPosition;
+    // Whether the weight is grabbed or not
 
-    void Start()
+    private bool weightGrabbed = false;
+
+
+    public void UpdateLocation()
     {
-        initialPosition = transform.position;
+        if (weightGrabbed)
+        {
+            handTransform.position = handPosition;
+        }
     }
-
     void Update()
     {
-        // Calculate the difference in position between the controller and the hand
-        Vector3 controllerPosition = controller.transform.position;
-        Vector3 handPosition = transform.position;
-        Vector3 positionDifference = controllerPosition - initialPosition;
+        if (weightGrabbed)
+        {
 
-        // Apply the movement ratio to the position difference and add it to the hand position
-        Vector3 modifiedPositionDifference = positionDifference * movementRatio;
-        transform.position = handPosition + modifiedPositionDifference;
+            handPosition = initialPosition + Vector3.Scale(lastVelocity, new Vector3(1f, movementRatio, 1f)) * Time.deltaTime;
+            initialPosition = handPosition;
+            lastVelocity = velocityTrackerProcessor.GetVelocity();
+        }
+    }
+
+    public void WeightGrabbed()
+    {
+        // Get the interactable that is grabbed
+        IReadOnlyList<GameObject> GrabbedObjects = interactorFacade.GrabbedObjects;
+        foreach (GameObject grabbedObject in GrabbedObjects)
+        {
+            // get the mass of the grabbed object
+            float mass = grabbedObject.GetComponent<Rigidbody>().mass;
+            // update the movement ratio based on the mass of the grabbed object. 
+            // The highest mass of 11 should have a movement ratio of 0.7 
+            // and the lowest mass of 1 should have a ratio of 1.0
+            movementRatio = 0.7f + 0.3f * (1f - ((mass - 1f) / 10f));
+        }
+        initialPosition = controllerTransform.position;
+        lastVelocity = velocityTrackerProcessor.GetVelocity();
+        weightGrabbed = true;
+    }
+
+    public void WeightUngrabbed()
+    {
+        Debug.Log("Weight ungrabbed");
+        weightGrabbed = false;
     }
 }

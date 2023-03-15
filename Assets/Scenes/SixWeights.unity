@@ -954,6 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!114 &180652880 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 785982709505707726, guid: 1bb7642ebf8d0a34aa23fc586ea87e6a, type: 3}
@@ -1700,6 +1701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!1 &272639223
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,6 +3795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!1001 &910442475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4070,6 +4073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!1001 &970250294
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5667,6 +5671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!1 &1455067556
 GameObject:
   m_ObjectHideFlags: 0
@@ -5943,6 +5948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 2
+  usePaperValues: 0
 --- !u!1001 &1468854103
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorRespawn : MonoBehaviour
+public class RespawnWeight : MonoBehaviour
 {
     // The original position of the game object
     private Vector3 originalPosition;
@@ -29,11 +29,12 @@ public class FloorRespawn : MonoBehaviour
     {
         // Check if the game object collider is hitting the floor and respawn it if it is
         if (transform.position.y < 1.2f) {
-            transform.position = originalPosition;
-            transform.rotation = originalRotation;
+            Respawn();
         }
     }
+
+    public void Respawn() {
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+    }
 }
-
-
-// TODO: Fix the rotation of the weight when it is respawned

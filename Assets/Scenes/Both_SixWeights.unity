@@ -955,7 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 0
+  velocityLimitEnabled: 1
 --- !u!114 &118260644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3880,7 +3880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 0
+  velocityLimitEnabled: 1
 --- !u!114 &909628317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4685,6 +4685,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1581871440}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetWeights
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2884100002522498368, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -5787,7 +5815,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 0
+  velocityLimitEnabled: 1
 --- !u!114 &1443501177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6077,7 +6105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 0
+  velocityLimitEnabled: 1
 --- !u!114 &1456755621
 MonoBehaviour:
   m_ObjectHideFlags: 0

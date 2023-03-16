@@ -108,7 +108,7 @@ public class DropOnFastLift : MonoBehaviour
         if (velocityLimitEnabled) {
             Vector3 distance = transform.position - startPosition;
             Debug.Log("distance: " + distance);
-            if (Mathf.Abs(distance.y) > 0.057f && Mathf.Abs(distance.x) < 0.057f && Mathf.Abs(distance.z) < 0.057f) {
+            if (Mathf.Abs(distance.y) > 0.057f || Mathf.Abs(distance.x) > 0.057f || Mathf.Abs(distance.z) > 0.057f) {
                 Debug.Log("outside origin limit");
                 isOutsideOriginLimit = true;
             }

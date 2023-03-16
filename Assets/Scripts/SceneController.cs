@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MassRandomizer : MonoBehaviour
+public class SceneController : MonoBehaviour
 {
 
     // Array of the different weight game objects
@@ -65,5 +65,15 @@ public class MassRandomizer : MonoBehaviour
             weights[0].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2 + 1];
             weights[1].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2];
         }
+    }
+
+    // Function to reset the weights and randomize their masses
+    public void ResetWeights() {
+        // For each weight, reset its position and rotation
+        foreach (GameObject weight in weights) {
+            weight.GetComponent<RespawnWeight>().Respawn();
+        }
+        // Randomize the masses of the weights
+        RandomizeMasses();
     }
 }

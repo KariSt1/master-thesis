@@ -75,7 +75,7 @@ public class DropOnFastLift : MonoBehaviour
         }
     }
 
-    private void CalculateMaxVelocity() {
+    public void CalculateMaxVelocity() {
         if (usePaperValues) {
             if (interactableRigidbody.mass > 9.83f) {
                 maxVelocity = (1.9f / interactableRigidbody.mass + 0.06f);

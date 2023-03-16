@@ -25,21 +25,24 @@ public class HandMovement : MonoBehaviour
     private Vector3 handPosition;
     // Whether the weight is grabbed or not
 
+    // Is C/D ratio modification emabled
+    public bool CDRatioEnabled = false;
+
     private bool weightGrabbed = false;
 
 
     public void UpdateLocation()
     {
-        if (weightGrabbed)
+        if (CDRatioEnabled && weightGrabbed)
         {
             handTransform.position = handPosition;
         }
     }
     void Update()
     {
-        if (weightGrabbed)
+        if (CDRatioEnabled && weightGrabbed)
         {
-
+            // Debug.Log("In update weight grabbed");
             // Hand position with C/D ratio that that takes into account the velocity of the controller
             handPosition = initialPosition + Vector3.Scale(lastVelocity, new Vector3(1f, movementRatio, 1f)) * Time.deltaTime;
             // Hand position with C/D ratio that that takes into account the position of the controller according to the formula used in https://ieeexplore.ieee.org/document/9669918
@@ -51,28 +54,34 @@ public class HandMovement : MonoBehaviour
 
     public void WeightGrabbed()
     {
-        // Get the interactable that is grabbed
-        IReadOnlyList<GameObject> GrabbedObjects = interactorFacade.GrabbedObjects;
-        foreach (GameObject grabbedObject in GrabbedObjects)
-        {
-            // get the mass of the grabbed object
-            float mass = grabbedObject.GetComponent<Rigidbody>().mass;
-            // update the movement ratio based on the mass of the grabbed object. 
-            // The highest mass of 11 should have a movement ratio of 0.7 
-            // and the lowest mass of 1 should have a ratio of 1.0
-            movementRatio = 0.7f + 0.3f * (1f - ((mass - 1f) / 10f));
-            
-            // update the movement ratio based on the mass of the grabbed object. 
-            // The highest mass of 11 should have a movement ratio of 0.05 
-            // and the lowest mass of 1 should have a ratio of 0.3
-            // movementRatio = 0.05f + 0.25f * (1f - ((mass - 1f) / 10f));
+        if (CDRatioEnabled) {
+            // Get the interactable that is grabbed
+            IReadOnlyList<GameObject> GrabbedObjects = interactorFacade.GrabbedObjects;
+            foreach (GameObject grabbedObject in GrabbedObjects)
+            {
+                // get the mass of the grabbed object
+                float mass = grabbedObject.GetComponent<Rigidbody>().mass;
+                // update the movement ratio based on the mass of the grabbed object. 
+                // The highest mass of 11 should have a movement ratio of 0.7 
+                // and the lowest mass of 1 should have a ratio of 1.0
+                // movementRatio = 0.7f + 0.3f * (1f - ((mass - 1f) / 10f));
+                // update the movement ratio based on the mass of the grabbed object. 
+                // The highest mass of 11 should have a movement ratio of 0.7 
+                // and the lowest mass of 1 should have a ratio of 1.3
+                movementRatio = 0.7f + 0.6f * (1f - ((mass - 1f) / 10f));
 
-            // movementRatio = 0.05f + 0.95f * (1f - ((mass - 1f) / 10f));
-            Debug.Log("Weight grabbed with mass " + mass + " and movement ratio " + movementRatio);
+                // update the movement ratio based on the mass of the grabbed object. 
+                // The highest mass of 11 should have a movement ratio of 0.05 
+                // and the lowest mass of 1 should have a ratio of 0.3
+                // movementRatio = 0.05f + 0.25f * (1f - ((mass - 1f) / 10f));
+
+                // movementRatio = 0.05f + 0.95f * (1f - ((mass - 1f) / 10f));
+                Debug.Log("Weight grabbed with mass " + mass + " and movement ratio " + movementRatio);
+            }
+            initialPosition = controllerTransform.position;
+            lastVelocity = velocityTrackerProcessor.GetVelocity();
+            weightGrabbed = true;
         }
-        initialPosition = controllerTransform.position;
-        lastVelocity = velocityTrackerProcessor.GetVelocity();
-        weightGrabbed = true;
     }
 
     public void WeightUngrabbed()

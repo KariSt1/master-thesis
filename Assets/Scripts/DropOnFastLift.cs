@@ -17,8 +17,11 @@ public class DropOnFastLift : MonoBehaviour
     private Vector3 startPosition;
     private bool isOutsideOriginLimit = false;
 
-    // TODO: Remove this, this is a toggle between my values for maxVelocity and the values from the paper
+    // TODO: Remove this, this is a toggle between my values for maxVelocity and the values from Emma's paper
     public bool usePaperValues = false;
+
+    // Is velocity limiting enabled
+    public bool velocityLimitEnabled = false;
 
     void Awake()
     {
@@ -32,7 +35,7 @@ public class DropOnFastLift : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (interactable && interactable.IsGrabbed)
+        if (velocityLimitEnabled && interactable && interactable.IsGrabbed)
         {
             if (!startPositionSet) {
                 Debug.Log("Setting start position...");
@@ -42,7 +45,7 @@ public class DropOnFastLift : MonoBehaviour
             }
 
             // Check if the weight is outside the origin position limits where the weight cannot be dropped
-            //if (isOutsideOriginLimit) {
+            if (isOutsideOriginLimit) {
                 // Get the list of grabbing interactors
                 IReadOnlyList<InteractorFacade> grabbingInteractors = interactable.GrabbingInteractors;
                 // Iterate through the grabbing interactors to see if any of them are moving too fast
@@ -64,10 +67,10 @@ public class DropOnFastLift : MonoBehaviour
                         break;
                     }
                 }
-            // } else {
-            //     Debug.Log("IN ELSE: checking distance from origin...");
-            //     CheckDistanceFromOrigin();
-            // }
+            } else {
+                Debug.Log("IN ELSE: checking distance from origin...");
+                CheckDistanceFromOrigin();
+            }
 
         }
     }
@@ -96,15 +99,19 @@ public class DropOnFastLift : MonoBehaviour
     }
 
     private void CalculateAngularDrag() {
-        interactableRigidbody.angularDrag = (0.5f * (interactableRigidbody.mass*interactableRigidbody.mass));
+        if (velocityLimitEnabled) {
+            interactableRigidbody.angularDrag = (0.5f * (interactableRigidbody.mass*interactableRigidbody.mass));
+        }
     }
 
     private void CheckDistanceFromOrigin() {
-        Vector3 distance = transform.position - startPosition;
-        Debug.Log("distance: " + distance);
-        if (distance.y > 0.5f && Mathf.Abs(distance.x) < 0.1f && Mathf.Abs(distance.z) < 0.1f) {
-            Debug.Log("outside origin limit");
-            isOutsideOriginLimit = true;
+        if (velocityLimitEnabled) {
+            Vector3 distance = transform.position - startPosition;
+            Debug.Log("distance: " + distance);
+            if (Mathf.Abs(distance.y) > 0.057f && Mathf.Abs(distance.x) < 0.057f && Mathf.Abs(distance.z) < 0.057f) {
+                Debug.Log("outside origin limit");
+                isOutsideOriginLimit = true;
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ public class HandMovement : MonoBehaviour
 
     private bool weightGrabbed = false;
 
-
+    // Set in the Modified EventData of the Position ProperyModifer in Internal on the tracked alias
     public void UpdateLocation()
     {
         if (CDRatioEnabled && weightGrabbed)
@@ -52,6 +52,7 @@ public class HandMovement : MonoBehaviour
         }
     }
 
+    // Called on the Grabbed action InteractableFacade of the Interactions.Interactor
     public void WeightGrabbed()
     {
         if (CDRatioEnabled) {
@@ -84,6 +85,7 @@ public class HandMovement : MonoBehaviour
         }
     }
 
+    // Called on the Ungrabbed action InteractableFacade of the Interactions.Interactor
     public void WeightUngrabbed()
     {
         Debug.Log("Weight ungrabbed");

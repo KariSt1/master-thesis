@@ -65,11 +65,11 @@ public class HandMovement : MonoBehaviour
                 // update the movement ratio based on the mass of the grabbed object. 
                 // The highest mass of 11 should have a movement ratio of 0.7 
                 // and the lowest mass of 1 should have a ratio of 1.0
-                // movementRatio = 0.7f + 0.3f * (1f - ((mass - 1f) / 10f));
+                movementRatio = 0.7f + 0.3f * (1f - ((mass - 1f) / 10f));
                 // update the movement ratio based on the mass of the grabbed object. 
                 // The highest mass of 11 should have a movement ratio of 0.7 
                 // and the lowest mass of 1 should have a ratio of 1.3
-                movementRatio = 0.7f + 0.6f * (1f - ((mass - 1f) / 10f));
+                // movementRatio = 0.7f + 0.6f * (1f - ((mass - 1f) / 10f));
 
                 // update the movement ratio based on the mass of the grabbed object. 
                 // The highest mass of 11 should have a movement ratio of 0.05 

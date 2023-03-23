@@ -6,7 +6,7 @@ using Tilia.Interactions.Interactables.Interactors;
 using System.Collections.Generic;
 using Zinnia.Tracking.Velocity;
 
-public class DropOnFastLift : MonoBehaviour
+public class DropOnFastLift : MonoBehaviour, IDataPersistence
 {
     public float maxVelocity = 2.0f;
 
@@ -22,6 +22,14 @@ public class DropOnFastLift : MonoBehaviour
 
     // Is velocity limiting enabled
     public bool velocityLimitEnabled = false;
+
+    // *** DATA COLLECTION ***
+    // How often this weight has been dropped
+    private int dropCount = 0;
+    // How often this weight has been picked up
+    private int pickUpCount = 0;
+    // The mass of this weight
+    private int mass = 0;
 
     void Awake()
     {
@@ -62,6 +70,7 @@ public class DropOnFastLift : MonoBehaviour
                     if (currentVelocityYMagnitude > maxVelocity) {
                         // interactable.Ungrab(interactor);
                         interactor.Ungrab();
+                        IncrementWeightDroppedCounter();
                         startPositionSet = false;
                         isOutsideOriginLimit = false;
                         break;
@@ -113,5 +122,33 @@ public class DropOnFastLift : MonoBehaviour
                 isOutsideOriginLimit = true;
             }
         }
+    }
+
+    public void ResetData() {
+        dropCount = 0;
+        pickUpCount = 0;
+        mass = (int)interactableRigidbody.mass;
+    }
+
+    private void IncrementWeightDroppedCounter() {
+        dropCount++;
+    }
+
+    public int GetWeightDroppedCounter() {
+        return dropCount;
+    }
+
+    public void IncrementWeightPickedUpCounter() {
+        pickUpCount++;
+    }
+
+    public int GetWeightPickedUpCounter() {
+        return pickUpCount;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.weightDroppedCounterByMass.Add(mass, dropCount);
+        data.weightPickedUpCounterByMass.Add(mass, pickUpCount);
     }
 }

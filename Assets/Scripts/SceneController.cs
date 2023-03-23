@@ -10,6 +10,8 @@ public class SceneController : MonoBehaviour
 
     // Array of possible masses for the weights
     private float[] massesArray = { 1f, 3f, 5f, 7f, 9f, 11f };
+    // The same array as above expect it is a 2D array with pairs
+    private float[,] massesArrayPairs = { { 1f, 11f }, { 3f, 9f }, { 5f, 7f }};
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,7 @@ public class SceneController : MonoBehaviour
         // For each weight, get the DropOnFastLift script and set the max velocity
         foreach (GameObject weight in weights) {
             DropOnFastLift dropOnFastLift = weight.GetComponent<DropOnFastLift>();
+            dropOnFastLift.ResetData();
             dropOnFastLift.CalculateMaxVelocity();
         }
     }
@@ -55,16 +58,11 @@ public class SceneController : MonoBehaviour
 
     // Function to randomize 2 weights
     private void RandomizeTwoWeights() {
-        // Give the two weights a random mass either from the first two masses, the middle two masses, or the last two masses
+        // Give the two weights a random mass from one of the pairs in the massesArrayPairs array
         int randomIndex = Random.Range(0, 3);
         int randomIndex2 = Random.Range(0, 2);
-        if (randomIndex2 == 0) {
-            weights[0].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2];
-            weights[1].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2 + 1];
-        } else {
-            weights[0].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2 + 1];
-            weights[1].GetComponent<Rigidbody>().mass = massesArray[randomIndex*2];
-        }
+        weights[0].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, randomIndex2];
+        weights[1].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, 1 - randomIndex2];
     }
 
     // Function to reset the weights and randomize their masses

@@ -8,7 +8,6 @@ using Zinnia.Tracking.Velocity;
 
 public class DropOnFastLift : MonoBehaviour, IDataPersistence
 {
-    public int weightNumber = 0;
     public float maxVelocity = 2.0f;
 
     private InteractableFacade interactable;
@@ -31,6 +30,10 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     private int pickUpCount = 0;
     // The mass of this weight
     private int mass = 0;
+    // The initial position of this weight
+    public int weightNumber = 0;
+    // The index of the platform this weight is on
+    private int platformIndex = -1;
 
     void Awake()
     {
@@ -124,7 +127,10 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     public void ResetData() {
         dropCount = 0;
         pickUpCount = 0;
-        mass = (int)interactableRigidbody.mass;
+        platformIndex = -1;
+        Debug.Log("resetting data, rigidbody mass: " + interactableRigidbody.mass);
+        mass = Mathf.RoundToInt(interactableRigidbody.mass);
+        Debug.Log("resetting data, mass: " + mass);
     }
 
     private void IncrementWeightDroppedCounter() {
@@ -145,6 +151,15 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        data.AddMassData(mass, dropCount, pickUpCount);
+        data.AddMassData(weightNumber, mass, dropCount, pickUpCount, platformIndex);
     }
-}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "WeightPlacementCollider") {
+            // Get the platform index from the WeightPlacementCollider script
+            platformIndex = other.gameObject.GetComponent<WeightPlacementCollider>().GetPlatformIndex(); 
+            Debug.Log("colliding with weight placement collider, platform index: " + platformIndex);
+        }
+    }
+}   

@@ -21,16 +21,8 @@ public class GameData
         currentConditionData.SetStartTime();
     }
 
-    public void AddInitialOrder(List<int> initialOrder) {
-        currentConditionData.initialOrder = initialOrder;
-    }
-
-    public void AddFinalPlacement(List<int> finalPlacement) {
-        currentConditionData.finalPlacement = finalPlacement;
-    }
-
-    public void AddMassData(int mass, int dropCount, int pickUpCount) {
-        currentConditionData.AddMassData(mass, dropCount, pickUpCount);
+    public void AddMassData(int initialPosition, int mass, int dropCount, int pickUpCount, int finalPosition) {
+        currentConditionData.AddMassData(initialPosition, mass, dropCount, pickUpCount, finalPosition);
     }
 
     private void FinalizeConditionData() {

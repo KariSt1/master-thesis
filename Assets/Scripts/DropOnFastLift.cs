@@ -8,6 +8,7 @@ using Zinnia.Tracking.Velocity;
 
 public class DropOnFastLift : MonoBehaviour, IDataPersistence
 {
+    public int weightNumber = 0;
     public float maxVelocity = 2.0f;
 
     private InteractableFacade interactable;
@@ -34,9 +35,7 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     void Awake()
     {
         interactable = GetComponentInChildren<InteractableFacade>();
-        Debug.Log("interactabler: " + interactable);
         interactableRigidbody = gameObject.GetComponent<Rigidbody>();
-        Debug.Log("rigidbody: " + interactableRigidbody);
         CalculateMaxVelocity();
     }
 
@@ -46,9 +45,7 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
         if (velocityLimitEnabled && interactable && interactable.IsGrabbed)
         {
             if (!startPositionSet) {
-                Debug.Log("Setting start position...");
                 startPosition = transform.position;
-                Debug.Log("Start position: " + startPosition);
                 startPositionSet = true;
             }
 
@@ -116,9 +113,9 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     private void CheckDistanceFromOrigin() {
         if (velocityLimitEnabled) {
             Vector3 distance = transform.position - startPosition;
-            Debug.Log("distance: " + distance);
+            // Debug.Log("distance: " + distance);
             if (Mathf.Abs(distance.y) > 0.057f || Mathf.Abs(distance.x) > 0.057f || Mathf.Abs(distance.z) > 0.057f) {
-                Debug.Log("outside origin limit");
+                // Debug.Log("outside origin limit");
                 isOutsideOriginLimit = true;
             }
         }
@@ -148,7 +145,6 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        data.weightDroppedCounterByMass.Add(mass, dropCount);
-        data.weightPickedUpCounterByMass.Add(mass, pickUpCount);
+        data.AddMassData(mass, dropCount, pickUpCount);
     }
 }

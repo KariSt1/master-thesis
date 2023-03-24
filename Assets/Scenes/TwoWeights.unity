@@ -1410,6 +1410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599db5fb037426649bef45ea8ca06800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weightNumber: 1
   maxVelocity: 2
   usePaperValues: 0
   velocityLimitEnabled: 1
@@ -1638,6 +1639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92cba96c75535e84ba65ca8866dad080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conditionName: 
   fileName: data_test.json
 --- !u!4 &573619058
 Transform:
@@ -2875,6 +2877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599db5fb037426649bef45ea8ca06800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weightNumber: 2
   maxVelocity: 2
   usePaperValues: 0
   velocityLimitEnabled: 1
@@ -3521,6 +3524,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1916370848}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetWeights
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884100001780761330, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
+      propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2884100002522498368, guid: fe6a616c6215faa47b11c459561a0e7f, type: 3}
       propertyPath: m_RootOrder
       value: 6

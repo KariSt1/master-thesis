@@ -13,6 +13,8 @@ public class SceneController : MonoBehaviour
     // The same array as above expect it is a 2D array with pairs
     private float[,] massesArrayPairs = { { 1f, 11f }, { 3f, 9f }, { 5f, 7f }};
 
+    // public DataPersistenceManager dataPersistenceManager;
+
     // Start is called before the first frame update
     void Start()
     {    
@@ -67,6 +69,7 @@ public class SceneController : MonoBehaviour
 
     // Function to reset the weights and randomize their masses
     public void ResetWeights() {
+        DataPersistenceManager.instance.SaveData();
         // For each weight, reset its position and rotation
         foreach (GameObject weight in weights) {
             weight.GetComponent<RespawnWeight>().Respawn();

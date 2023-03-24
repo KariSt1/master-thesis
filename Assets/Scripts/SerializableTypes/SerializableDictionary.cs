@@ -14,6 +14,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     // save the dictionary to lists
     public void OnBeforeSerialize()
     {
+        Debug.Log("OnBeforeSerialize");
         keys.Clear();
         values.Clear();
         foreach(KeyValuePair<TKey, TValue> pair in this)

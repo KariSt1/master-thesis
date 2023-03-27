@@ -7,10 +7,11 @@ public class GameData
 {
     public List<ConditionData> conditionDataList;
     private ConditionData currentConditionData;
+    private int testNumber = 1;
 
     public GameData() {
         conditionDataList = new List<ConditionData>();
-        currentConditionData = new ConditionData();
+        currentConditionData = new ConditionData(testNumber++);
     }
 
     public void SaveDataToDictionary() {
@@ -28,7 +29,7 @@ public class GameData
     private void FinalizeConditionData() {
         currentConditionData.FinalizeData();
         conditionDataList.Add(currentConditionData);
-        currentConditionData = new ConditionData();
+        currentConditionData = new ConditionData(testNumber++);
         currentConditionData.SetStartTime();
     }
 }

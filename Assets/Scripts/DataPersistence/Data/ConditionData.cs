@@ -5,13 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class ConditionData
 {
+    public int testNumber;
     public List<MassData> massDataList;
     public float startTime;
     public float endTime;
     public float timeToComplete;
 
 
-    public ConditionData() {
+    public ConditionData(int testNumber) {
+        this.testNumber = testNumber;
         massDataList = new List<MassData>();
         timeToComplete = 0f;
     }

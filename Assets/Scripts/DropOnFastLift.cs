@@ -162,4 +162,10 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
             Debug.Log("colliding with weight placement collider, platform index: " + platformIndex);
         }
     }
+
+    void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "WeightPlacementCollider") {
+            platformIndex = -1;
+        }
+    }
 }   

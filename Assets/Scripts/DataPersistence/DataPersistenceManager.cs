@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class DataPersistenceManager : MonoBehaviour
     }
 
     private void Start() {
+        DateTime dateTime = DateTime.Now;
+        string stringDateTime = dateTime.ToString("yyyy-MM-dd_HH.mm.ss");
+        fileName = stringDateTime + "_" + fileName;
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         NewGame();

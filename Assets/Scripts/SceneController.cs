@@ -10,8 +10,11 @@ public class SceneController : MonoBehaviour
 
     // Array of possible masses for the weights
     private float[] massesArray = { 1f, 3f, 5f, 7f, 9f, 11f };
-    // The same array as above expect it is a 2D array with pairs
     private float[,] massesArrayPairs = { { 1f, 11f }, { 3f, 9f }, { 5f, 7f }};
+
+    // Array for the order that the 2 weights will be randomized
+    private int[] randomizeOrder = new int[30];
+    private int twoWeightTestIndex = 0;
 
     // public DataPersistenceManager dataPersistenceManager;
 
@@ -60,15 +63,57 @@ public class SceneController : MonoBehaviour
 
     // Function to randomize 2 weights
     private void RandomizeTwoWeights() {
+        if (twoWeightTestIndex == 0) {
+            RandomizePairOrder();
+        }
         // Give the two weights a random mass from one of the pairs in the massesArrayPairs array
-        int randomIndex = Random.Range(0, 3);
+        int randomIndex = randomizeOrder[twoWeightTestIndex]%3;
+        Debug.Log("Random index: " + randomIndex);
+        twoWeightTestIndex++;
         int randomIndex2 = Random.Range(0, 2);
         weights[0].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, randomIndex2];
         weights[1].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, 1 - randomIndex2];
     }
 
+    // A function that creates an array of length 30 with numbers from 0 to 2 where each number appears in a random order 10 times
+    private void RandomizePairOrder() {
+        // Create a 30 element array with numbers from 0 to 29
+        int[] tempArray = new int[30];
+        for (int i = 0; i < tempArray.Length; i++) {
+            tempArray[i] = i;
+        }
+        // Randomize the order of the numbers in the randomizeOrder array
+        for (int i = 0; i < 30; i++) {
+            int randomIndex = Random.Range(0, tempArray.Length);
+            randomizeOrder[i] = tempArray[randomIndex];
+            int[] tempArray2 = tempArray;
+            tempArray = new int[tempArray.Length - 1];
+            int j = 0;
+            for (int k = 0; k < tempArray2.Length; k++) {
+                if (k != randomIndex) {
+                    tempArray[j] = tempArray2[k];
+                    j++;
+                }
+            }
+        }
+    }
+
+
     // Function to reset the weights and randomize their masses
     public void ResetWeights() {
+        if (twoWeightTestIndex == 30) {
+            // two weight test is done
+            twoWeightTestIndex = 0;
+            // Application.Quit(); // TODO: change this to go to the next scene
+            #if UNITY_EDITOR
+                // Application.Quit() does not work in the editor so
+                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
+            return;
+        }
         DataPersistenceManager.instance.SaveData();
         // For each weight, reset its position and rotation
         foreach (GameObject weight in weights) {

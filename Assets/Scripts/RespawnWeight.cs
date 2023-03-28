@@ -7,8 +7,8 @@ public class RespawnWeight : MonoBehaviour
     // The original position of the game object
     private Vector3 originalPosition;
 
-    // The original rotation of the game object
-    private Quaternion originalRotation;
+    // The original euler angles of the game object
+    private Vector3 originalEulerAngles;
 
     // The BoxCollider of the floor
     private BoxCollider floorCollider;
@@ -16,12 +16,11 @@ public class RespawnWeight : MonoBehaviour
     // The BoxCollider of the game object
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {  
         // Set the original position of the game object
-        originalPosition = transform.position;
-        // Set the original rotation of the game object
-        originalRotation = transform.rotation;
+        originalPosition = transform.localPosition;
+        originalEulerAngles = transform.eulerAngles;
     }
 
     // Update is called once per frame
@@ -34,7 +33,7 @@ public class RespawnWeight : MonoBehaviour
     }
 
     public void Respawn() {
-        transform.position = originalPosition;
-        transform.rotation = originalRotation;
+        transform.localPosition = originalPosition;
+        transform.eulerAngles = originalEulerAngles;
     }
 }

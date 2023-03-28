@@ -6,8 +6,7 @@ using System;
 
 public class DataPersistenceManager : MonoBehaviour
 {
-    [Header("Condition name")]
-    [SerializeField] private string conditionName;
+    public string conditionName;
 
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
@@ -32,6 +31,11 @@ public class DataPersistenceManager : MonoBehaviour
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         NewGame();
+    }
+
+    public void SetConditionName(string conditionName) {
+        this.conditionName = conditionName;
+        gameData.SetScenarioName(conditionName);
     }
 
     public void NewGame() {
@@ -61,8 +65,13 @@ public class DataPersistenceManager : MonoBehaviour
         SaveGame();
     }
 
+    public void UpdateWeightObjects() {
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+    }
+
     private List<IDataPersistence> FindAllDataPersistenceObjects() {
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
+        Debug.Log("Found " + dataPersistenceObjects.Count() + " data persistence objects");
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
 }

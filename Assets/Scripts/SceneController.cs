@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {
+    private string currentScenario = "SixWeights";
+    private int currentTestNumber = 1;
+    [SerializeField] GameObject sixWeightsEnvironment;
+    [SerializeField] GameObject twoWeightsEnvironment;
 
-    // Array of the different weight game objects
-    public GameObject[] weights;
+    // Array for six weights scenario
+    public GameObject[] sixWeights;
+
+    // Array for two weights scenario
+    public GameObject[] twoWeights;
 
     // Array of possible masses for the weights
     private float[] massesArray = { 1f, 3f, 5f, 7f, 9f, 11f };
@@ -23,21 +30,32 @@ public class SceneController : MonoBehaviour
     {    
         // Randomize the masses of the weights
         RandomizeMasses();
+        // Set the condition name in the data persistence manager
+        DataPersistenceManager.instance.SetConditionName(currentScenario);
     }
 
     public void RandomizeMasses() {
-        // If there are 6 weights, randomize the mass of all of them
-        if (weights.Length == 6) {
+        // Randomize weights depending on current scenario
+        if (currentScenario == "SixWeights") {
+            // Randomize the mass of the six weights
             RandomizeSixWeights();
-        // If there are 2 weights, randomize the mass of only two of them
-        } else if (weights.Length == 2) {
+        } else if (currentScenario == "TwoWeights") {
+            // Randomize the mass of the two weights
             RandomizeTwoWeights();
         }
         // For each weight, get the DropOnFastLift script and set the max velocity
-        foreach (GameObject weight in weights) {
-            DropOnFastLift dropOnFastLift = weight.GetComponent<DropOnFastLift>();
-            dropOnFastLift.ResetData();
-            dropOnFastLift.CalculateMaxVelocity();
+        if (currentScenario == "SixWeights") {
+            foreach (GameObject weight in sixWeights) {
+                DropOnFastLift dropOnFastLift = weight.GetComponent<DropOnFastLift>();
+                dropOnFastLift.ResetData();
+                dropOnFastLift.CalculateMaxVelocity();
+            }
+        } else if (currentScenario == "TwoWeights") {
+            foreach (GameObject weight in twoWeights) {
+                DropOnFastLift dropOnFastLift = weight.GetComponent<DropOnFastLift>();
+                dropOnFastLift.ResetData();
+                dropOnFastLift.CalculateMaxVelocity();
+            }
         }
     }
 
@@ -46,9 +64,9 @@ public class SceneController : MonoBehaviour
         // Temporary array with the possible masses
         float[] possibleMasses = massesArray;
         // Randomize the mass of the weights without repeating the same mass
-        for (int i = 0; i < weights.Length; i++) {
+        for (int i = 0; i < sixWeights.Length; i++) {
             int randomIndex = Random.Range(0, possibleMasses.Length);
-            weights[i].GetComponent<Rigidbody>().mass = possibleMasses[randomIndex];
+            sixWeights[i].GetComponent<Rigidbody>().mass = possibleMasses[randomIndex];
             float[] tempArray = possibleMasses;
             possibleMasses = new float[possibleMasses.Length - 1];
             int j = 0;
@@ -71,8 +89,8 @@ public class SceneController : MonoBehaviour
         Debug.Log("Random index: " + randomIndex);
         twoWeightTestIndex++;
         int randomIndex2 = Random.Range(0, 2);
-        weights[0].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, randomIndex2];
-        weights[1].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, 1 - randomIndex2];
+        twoWeights[0].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, randomIndex2];
+        twoWeights[1].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, 1 - randomIndex2];
     }
 
     // A function that creates an array of length 30 with numbers from 0 to 2 where each number appears in a random order 10 times
@@ -100,22 +118,47 @@ public class SceneController : MonoBehaviour
 
 
     // Function to reset the weights and randomize their masses
-    public void ResetWeights() {
-        if (twoWeightTestIndex == 30) {
-            // two weight test is done
-            twoWeightTestIndex = 0;
-            // Application.Quit(); // TODO: change this to go to the next scene
-            #if UNITY_EDITOR
-                // Application.Quit() does not work in the editor so
-                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                Application.Quit();
-            #endif
-            return;
+    public void ContinueToNextTest() {
+        if (currentScenario == "SixWeights") {
+            DataPersistenceManager.instance.SetConditionName(currentScenario);
+            DataPersistenceManager.instance.SaveData();
+            // Six weights test is done
+            currentScenario = "TwoWeights";
+            // Set the condition name in the data persistence manager
+            // Disable the SixWeightsEnvironment game object
+            sixWeightsEnvironment.SetActive(false);
+            // Enable the TwoWeightsEnvironment game object
+            twoWeightsEnvironment.SetActive(true);
+            DataPersistenceManager.instance.SetConditionName(currentScenario);
+            DataPersistenceManager.instance.UpdateWeightObjects();
+            currentTestNumber++;
+        } else if (currentScenario == "TwoWeights") {
+            currentTestNumber++;
+            // Check if two weights test is done
+            if (twoWeightTestIndex == 30) {
+                // two weight test is done
+                twoWeightTestIndex = 0;
+                // Application.Quit(); // TODO: change this to go to the next scene
+                #if UNITY_EDITOR
+                    // Application.Quit() does not work in the editor so
+                    // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+                    UnityEditor.EditorApplication.isPlaying = false;
+                #else
+                    Application.Quit();
+                #endif
+                return;
+            }
+            DataPersistenceManager.instance.SaveData();
         }
-        DataPersistenceManager.instance.SaveData();
         // For each weight, reset its position and rotation
+        GameObject[] weights;
+        if (currentScenario == "SixWeights") {
+            weights = sixWeights;
+        } else if (currentScenario == "TwoWeights") {
+            weights = twoWeights;
+        } else {
+            weights = new GameObject[0];
+        }
         foreach (GameObject weight in weights) {
             weight.GetComponent<RespawnWeight>().Respawn();
         }

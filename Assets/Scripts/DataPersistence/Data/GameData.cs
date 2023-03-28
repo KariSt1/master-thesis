@@ -8,10 +8,11 @@ public class GameData
     public List<ConditionData> conditionDataList;
     private ConditionData currentConditionData;
     private int testNumber = 1;
+    private string scenarioName = "Initial";
 
     public GameData() {
         conditionDataList = new List<ConditionData>();
-        currentConditionData = new ConditionData(testNumber++);
+        currentConditionData = new ConditionData(testNumber++, scenarioName);
     }
 
     public void SaveDataToDictionary() {
@@ -26,10 +27,15 @@ public class GameData
         currentConditionData.AddMassData(initialPosition, mass, dropCount, pickUpCount, finalPosition);
     }
 
+    public void SetScenarioName(string scenarioName) {
+        this.scenarioName = scenarioName;
+        currentConditionData.SetScenarioName(scenarioName);
+    }
+
     private void FinalizeConditionData() {
         currentConditionData.FinalizeData();
         conditionDataList.Add(currentConditionData);
-        currentConditionData = new ConditionData(testNumber++);
+        currentConditionData = new ConditionData(testNumber++, scenarioName);
         currentConditionData.SetStartTime();
     }
 }

@@ -8,12 +8,16 @@ public class SceneController : MonoBehaviour
     private int currentTestNumber = 1;
     [SerializeField] GameObject sixWeightsEnvironment;
     [SerializeField] GameObject twoWeightsEnvironment;
+    [SerializeField] GameObject milkCartonEnvironment;
 
     // Array for six weights scenario
     public GameObject[] sixWeights;
 
     // Array for two weights scenario
     public GameObject[] twoWeights;
+
+    // Array for milk carton scenario
+    public GameObject[] milkCartons;
 
     // Array of possible masses for the weights
     private float[] massesArray = { 1f, 3f, 5f, 7f, 9f, 11f };
@@ -38,10 +42,13 @@ public class SceneController : MonoBehaviour
         // Randomize weights depending on current scenario
         if (currentScenario == "SixWeights") {
             // Randomize the mass of the six weights
-            RandomizeSixWeights();
+            RandomizeSixWeights(sixWeights);
         } else if (currentScenario == "TwoWeights") {
             // Randomize the mass of the two weights
             RandomizeTwoWeights();
+        } else if (currentScenario == "MilkCarton") {
+            // Randomize the mass of the milk cartons
+            RandomizeSixWeights(milkCartons);
         }
         // For each weight, get the DropOnFastLift script and set the max velocity
         if (currentScenario == "SixWeights") {
@@ -56,17 +63,25 @@ public class SceneController : MonoBehaviour
                 dropOnFastLift.ResetData();
                 dropOnFastLift.CalculateMaxVelocity();
             }
+        } else if (currentScenario == "MilkCarton") {
+            foreach (GameObject weight in milkCartons) {
+                DropOnFastLift dropOnFastLift = weight.GetComponent<DropOnFastLift>();
+                dropOnFastLift.ResetData();
+                dropOnFastLift.CalculateMaxVelocity();
+            }
         }
     }
 
     // Function to randomize the 6 weights
-    private void RandomizeSixWeights() {
+    private void RandomizeSixWeights(GameObject[] weightArray) {
+        Debug.Log("Masses array length: " + massesArray.Length);
+        Debug.Log("Weight array length: " + weightArray.Length);
         // Temporary array with the possible masses
         float[] possibleMasses = massesArray;
         // Randomize the mass of the weights without repeating the same mass
-        for (int i = 0; i < sixWeights.Length; i++) {
+        for (int i = 0; i < weightArray.Length; i++) {
             int randomIndex = Random.Range(0, possibleMasses.Length);
-            sixWeights[i].GetComponent<Rigidbody>().mass = possibleMasses[randomIndex];
+            weightArray[i].GetComponent<Rigidbody>().mass = possibleMasses[randomIndex];
             float[] tempArray = possibleMasses;
             possibleMasses = new float[possibleMasses.Length - 1];
             int j = 0;
@@ -134,21 +149,32 @@ public class SceneController : MonoBehaviour
             currentTestNumber++;
         } else if (currentScenario == "TwoWeights") {
             currentTestNumber++;
+            DataPersistenceManager.instance.SaveData();
             // Check if two weights test is done
             if (twoWeightTestIndex == 30) {
                 // two weight test is done
                 twoWeightTestIndex = 0;
-                // Application.Quit(); // TODO: change this to go to the next scene
-                #if UNITY_EDITOR
-                    // Application.Quit() does not work in the editor so
-                    // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-                    UnityEditor.EditorApplication.isPlaying = false;
-                #else
-                    Application.Quit();
-                #endif
-                return;
+                currentScenario = "MilkCarton";
+                // Disable the TwoWeightsEnvironment game object
+                twoWeightsEnvironment.SetActive(false);
+                // Enable the MilkCartonEnvironment game object
+                milkCartonEnvironment.SetActive(true);
+                // Set the condition name in the data persistence manager
+                DataPersistenceManager.instance.SetConditionName(currentScenario);
+                DataPersistenceManager.instance.UpdateWeightObjects();
             }
-            DataPersistenceManager.instance.SaveData();
+        } else if (currentScenario == "MilkCarton") {
+            // DataPersistenceManager.instance.SetConditionName(currentScenario);
+            // DataPersistenceManager.instance.SaveData();
+            // Milk carton test is done and the experiment is done
+            #if UNITY_EDITOR
+                // Application.Quit() does not work in the editor so
+                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
+            return;
         }
         // For each weight, reset its position and rotation
         GameObject[] weights;
@@ -156,6 +182,8 @@ public class SceneController : MonoBehaviour
             weights = sixWeights;
         } else if (currentScenario == "TwoWeights") {
             weights = twoWeights;
+        } else if (currentScenario == "MilkCarton") {
+            weights = milkCartons;
         } else {
             weights = new GameObject[0];
         }

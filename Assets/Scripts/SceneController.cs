@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {
-    private string currentScenario = "SixWeights";
+    private string currentScenario = "HandSelection";
     private int currentTestNumber = 1;
+    [SerializeField] GameObject handSelectionEnvironment;
+    [SerializeField] GameObject liftTutorialEnvironment;
     [SerializeField] GameObject sixWeightsEnvironment;
     [SerializeField] GameObject twoWeightsEnvironment;
     [SerializeField] GameObject milkCartonEnvironment;
+
+    [SerializeField] GameObject leftInteractor;
+    [SerializeField] GameObject rightInteractor;
+
+    // Whether hand selection has been confirmed
+    private bool handSelected = false;
+
+    // Which hand is selcted
+    private string selectedHand = "";
 
     // Array for six weights scenario
     public GameObject[] sixWeights;
@@ -32,8 +43,8 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {    
-        // Randomize the masses of the weights
-        RandomizeMasses();
+        // // Randomize the masses of the weights
+        // RandomizeMasses();
         // Set the condition name in the data persistence manager
         DataPersistenceManager.instance.SetConditionName(currentScenario);
     }
@@ -131,10 +142,37 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void LeftControllerContinuePressed() {
+        if (selectedHand == "Right") {
+            ContinueToNextTest();
+        }
+    }
+
+    public void RightControllerContinuePressed() {
+        if (selectedHand == "Left") {
+            ContinueToNextTest();
+        }
+    }
 
     // Function to reset the weights and randomize their masses
     public void ContinueToNextTest() {
-        if (currentScenario == "SixWeights") {
+        if (currentScenario == "HandSelection") {
+            currentScenario = "LiftTutorial";
+            // Disable the HandSelectionEnvironment game object
+            handSelectionEnvironment.SetActive(false);
+            // Enable the LiftTutorialEnvironment game object
+            liftTutorialEnvironment.SetActive(true);
+            DataPersistenceManager.instance.SetConditionName(currentScenario);
+            handSelected = true;
+        } else if (currentScenario == "LiftTutorial") {
+            currentScenario = "SixWeights";
+            // Disable the LiftTutorialEnvironment game object
+            liftTutorialEnvironment.SetActive(false);
+            // Enable the SixWeightsEnvironment game object
+            sixWeightsEnvironment.SetActive(true);
+            DataPersistenceManager.instance.SetConditionName(currentScenario);
+            DataPersistenceManager.instance.UpdateWeightObjects();
+        } else if (currentScenario == "SixWeights") {
             DataPersistenceManager.instance.SetConditionName(currentScenario);
             DataPersistenceManager.instance.SaveData();
             // Six weights test is done
@@ -192,5 +230,26 @@ public class SceneController : MonoBehaviour
         }
         // Randomize the masses of the weights
         RandomizeMasses();
+    }
+
+    public void SelectLeftHand()
+    {
+        if (!handSelected) {
+            DataPersistenceManager.instance.SetHand("Left");
+            // Disable the game object
+            leftInteractor.SetActive(true);
+            rightInteractor.SetActive(false);
+            selectedHand = "Left";
+        }
+    }
+
+    public void SelectRightHand()
+    {
+        if (!handSelected) {
+            DataPersistenceManager.instance.SetHand("Right");
+            rightInteractor.SetActive(true);
+            leftInteractor.SetActive(false);
+            selectedHand = "Right";
+        }
     }
 }

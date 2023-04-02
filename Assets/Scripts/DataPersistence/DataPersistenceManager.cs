@@ -74,4 +74,8 @@ public class DataPersistenceManager : MonoBehaviour
         Debug.Log("Found " + dataPersistenceObjects.Count() + " data persistence objects");
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
+
+    public void SetHand(string hand) {
+        gameData.SetHand(hand);
+    }
 }

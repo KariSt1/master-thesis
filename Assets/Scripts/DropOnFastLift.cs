@@ -34,6 +34,11 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     public int weightNumber = 0;
     // The index of the platform this weight is on
     private int platformIndex = -1;
+    // Trajectory data list
+    private List<TrajectoryData> trajectoryData = new List<TrajectoryData>();
+    // Current trajectory data
+    private TrajectoryData currentTrajectoryData;
+
 
     void Awake()
     {
@@ -81,6 +86,10 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
                 CheckDistanceFromOrigin();
             }
 
+        }
+        // Add the current position to the trajectory data
+        if (currentTrajectoryData != null && interactable && interactable.IsGrabbed) {
+            currentTrajectoryData.AddTrajectoryPoint(transform.position);
         }
     }
 
@@ -151,7 +160,7 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        data.AddMassData(weightNumber, mass, dropCount, pickUpCount, platformIndex);
+        data.AddMassData(weightNumber, mass, dropCount, pickUpCount, platformIndex, trajectoryData);
     }
 
     void OnTriggerEnter(Collider other)
@@ -167,5 +176,14 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
         if (other.gameObject.tag == "WeightPlacementCollider") {
             platformIndex = -1;
         }
+    }
+
+    public void CreateTrajectoryData() {
+        currentTrajectoryData = new TrajectoryData();
+        trajectoryData.Add(currentTrajectoryData);
+    }
+
+    public void AddCurrentTrajectoryDataToList() {
+        trajectoryData.Add(currentTrajectoryData);
     }
 }   

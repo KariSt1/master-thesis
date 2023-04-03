@@ -20,8 +20,8 @@ public class ConditionData
         timeToComplete = 0f;
     }
 
-    public void AddMassData(int initialPosition, int mass, int dropCount, int pickUpCount, int finalPosition) {
-        massDataList.Add(new MassData(initialPosition, mass, dropCount, pickUpCount, finalPosition));
+    public void AddMassData(int initialPosition, int mass, int dropCount, int pickUpCount, int finalPosition, List<TrajectoryData> trajectoryDataList) {
+        massDataList.Add(new MassData(initialPosition, mass, dropCount, pickUpCount, finalPosition, trajectoryDataList));
     }
 
     public void SetStartTime() {

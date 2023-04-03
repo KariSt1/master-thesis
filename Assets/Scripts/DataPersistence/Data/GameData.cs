@@ -25,8 +25,8 @@ public class GameData
         currentConditionData.SetStartTime();
     }
 
-    public void AddMassData(int initialPosition, int mass, int dropCount, int pickUpCount, int finalPosition) {
-        currentConditionData.AddMassData(initialPosition, mass, dropCount, pickUpCount, finalPosition);
+    public void AddMassData(int initialPosition, int mass, int dropCount, int pickUpCount, int finalPosition, List<TrajectoryData> trajectoryDataList) {
+        currentConditionData.AddMassData(initialPosition, mass, dropCount, pickUpCount, finalPosition, trajectoryDataList);
     }
 
     public void SetScenarioName(string scenarioName) {
@@ -37,7 +37,7 @@ public class GameData
     public void SetHand(string hand) {
         this.hand = hand;
     }
-    
+
     private void FinalizeConditionData() {
         currentConditionData.FinalizeData();
         conditionDataList.Add(currentConditionData);

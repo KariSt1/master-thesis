@@ -17,6 +17,8 @@ public class SceneController : MonoBehaviour
 
     [SerializeField] Transform cameraRig;
 
+    [SerializeField] TwoWeightUICounter twoWeightUICounter;
+
     // Whether hand selection has been confirmed
     private bool handSelected = false;
 
@@ -199,6 +201,7 @@ public class SceneController : MonoBehaviour
         } else if (currentScenario == "TwoWeights") {
             currentTestNumber++;
             DataPersistenceManager.instance.SaveData();
+            twoWeightUICounter.AddOne();
             // Check if two weights test is done
             if (twoWeightTestIndex == 30) {
                 // two weight test is done

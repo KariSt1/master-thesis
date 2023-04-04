@@ -24,7 +24,7 @@ public class RespawnWeight : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         // Check if the game object collider is hitting the floor and respawn it if it is
         if (transform.position.y < 1.2f) {
@@ -33,7 +33,13 @@ public class RespawnWeight : MonoBehaviour
     }
 
     public void Respawn() {
-        transform.localPosition = originalPosition;
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().position = Vector2.zero;
+        GetComponent<Rigidbody>().rotation = Quaternion.identity;
+        GetComponent<Rigidbody>().useGravity = true;
         transform.eulerAngles = originalEulerAngles;
+        transform.localPosition = originalPosition;
     }
 }

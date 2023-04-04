@@ -45,24 +45,10 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {    
-        StartCoroutine(cameraHeightCoroutine());
         // // Randomize the masses of the weights
         // RandomizeMasses();
         // Set the condition name in the data persistence manager
         DataPersistenceManager.instance.SetConditionName(currentScenario);
-    }
-
-    IEnumerator cameraHeightCoroutine() {
-        yield return new WaitForSeconds(0.1f);
-        // Get the height of the camera rig
-        float cameraRigHeight = cameraRig.position.y;
-        // Set the height of all environments to 0.3 below the camera rig height
-        handSelectionEnvironment.transform.position = new Vector3(handSelectionEnvironment.transform.position.x, cameraRigHeight + 0.35f, handSelectionEnvironment.transform.position.z);
-        liftTutorialEnvironment.transform.position = new Vector3(liftTutorialEnvironment.transform.position.x, cameraRigHeight + 0.35f, liftTutorialEnvironment.transform.position.z);
-        sixWeightsEnvironment.transform.position = new Vector3(sixWeightsEnvironment.transform.position.x, cameraRigHeight + 0.35f, sixWeightsEnvironment.transform.position.z);
-        // two weights environment is 0.05 below the others
-        twoWeightsEnvironment.transform.position = new Vector3(twoWeightsEnvironment.transform.position.x, cameraRigHeight + 0.355f, twoWeightsEnvironment.transform.position.z);
-        milkCartonEnvironment.transform.position = new Vector3(milkCartonEnvironment.transform.position.x, cameraRigHeight + 0.35f, milkCartonEnvironment.transform.position.z);
     }
 
     public void RandomizeMasses() {
@@ -173,6 +159,15 @@ public class SceneController : MonoBehaviour
     // Function to reset the weights and randomize their masses
     public void ContinueToNextTest() {
         if (currentScenario == "HandSelection") {
+            float cameraRigHeight = cameraRig.localPosition.y;
+            Debug.Log("Camera rig height: " + cameraRigHeight);
+            // Set the height of all environments to 0.3 below the camera rig height
+            handSelectionEnvironment.transform.position = new Vector3(handSelectionEnvironment.transform.position.x, cameraRigHeight + 0.35f, handSelectionEnvironment.transform.position.z);
+            liftTutorialEnvironment.transform.position = new Vector3(liftTutorialEnvironment.transform.position.x, cameraRigHeight + 0.35f, liftTutorialEnvironment.transform.position.z);
+            sixWeightsEnvironment.transform.position = new Vector3(sixWeightsEnvironment.transform.position.x, cameraRigHeight + 0.35f, sixWeightsEnvironment.transform.position.z);
+            // two weights environment is 0.05 below the others
+            twoWeightsEnvironment.transform.position = new Vector3(twoWeightsEnvironment.transform.position.x, cameraRigHeight + 0.355f, twoWeightsEnvironment.transform.position.z);
+            milkCartonEnvironment.transform.position = new Vector3(milkCartonEnvironment.transform.position.x, cameraRigHeight + 0.35f, milkCartonEnvironment.transform.position.z);
             currentScenario = "LiftTutorial";
             // Disable the HandSelectionEnvironment game object
             handSelectionEnvironment.SetActive(false);

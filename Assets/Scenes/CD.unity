@@ -342,7 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 2
 --- !u!114 &22113200
 MonoBehaviour:
@@ -1573,7 +1573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 3
 --- !u!114 &118260644
 MonoBehaviour:
@@ -2787,7 +2787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 1
 --- !u!114 &237763954
 MonoBehaviour:
@@ -4509,7 +4509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 2
 --- !u!114 &619533251
 MonoBehaviour:
@@ -4726,7 +4726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 1
 --- !u!114 &628469466
 MonoBehaviour:
@@ -7193,7 +7193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 2
 --- !u!114 &909628317
 MonoBehaviour:
@@ -7620,7 +7620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 6
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 0
 --- !u!114 &952770652
 MonoBehaviour:
@@ -8524,7 +8524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 4
 --- !u!114 &1076564319
 MonoBehaviour:
@@ -9152,7 +9152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 3
 --- !u!114 &1137309989
 MonoBehaviour:
@@ -9959,7 +9959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 6
 --- !u!114 &1196151113
 MonoBehaviour:
@@ -11160,7 +11160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 5
 --- !u!114 &1443501177
 MonoBehaviour:
@@ -11617,7 +11617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 4
 --- !u!114 &1456755621
 MonoBehaviour:
@@ -12569,7 +12569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   conditionName: 
-  fileName: both.json
+  fileName: cd.json
 --- !u!4 &1535261727
 Transform:
   m_ObjectHideFlags: 0
@@ -13940,7 +13940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 5
 --- !u!114 &1718549422
 MonoBehaviour:
@@ -16874,7 +16874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 2
   usePaperValues: 0
-  velocityLimitEnabled: 1
+  velocityLimitEnabled: 0
   weightNumber: 1
 --- !u!114 &2082234172
 MonoBehaviour:

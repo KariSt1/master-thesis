@@ -49,8 +49,6 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.SaveData(ref gameData);
         }
         gameData.SaveDataToDictionary();
-        // save data to a file using the data handler
-        dataHandler.Save(gameData);
     }
 
     public void NextTest() {
@@ -58,7 +56,16 @@ public class DataPersistenceManager : MonoBehaviour
     }
 
     private void OnApplicationQuit() {
+        // save data to a file using the data handler
         SaveGame();
+        dataHandler.Save(gameData);
+    }
+
+    private void OnApplicationPause(bool pause) {
+        if (pause) {
+            SaveGame();
+            dataHandler.Save(gameData);
+        }
     }
 
     public void SaveData() {

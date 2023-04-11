@@ -7,6 +7,7 @@ public class SceneController : MonoBehaviour
     private string currentScenario = "HandSelection";
     private int currentTestNumber = 1;
     [SerializeField] GameObject handSelectionEnvironment;
+    [SerializeField] GameObject heightCalibrationEnvironment;
     [SerializeField] GameObject liftTutorialEnvironment;
     [SerializeField] GameObject sixWeightsEnvironment;
     [SerializeField] GameObject twoWeightsEnvironment;
@@ -89,8 +90,6 @@ public class SceneController : MonoBehaviour
 
     // Function to randomize the 6 weights
     private void RandomizeSixWeights(GameObject[] weightArray) {
-        Debug.Log("Masses array length: " + massesArray.Length);
-        Debug.Log("Weight array length: " + weightArray.Length);
         // Temporary array with the possible masses
         float[] possibleMasses = massesArray;
         // Randomize the mass of the weights without repeating the same mass
@@ -116,7 +115,6 @@ public class SceneController : MonoBehaviour
         }
         // Give the two weights a random mass from one of the pairs in the massesArrayPairs array
         int randomIndex = randomizeOrder[twoWeightTestIndex]%3;
-        Debug.Log("Random index: " + randomIndex);
         twoWeightTestIndex++;
         int randomIndex2 = Random.Range(0, 2);
         twoWeights[0].GetComponent<Rigidbody>().mass = massesArrayPairs[randomIndex, randomIndex2];
@@ -161,8 +159,15 @@ public class SceneController : MonoBehaviour
     // Function to reset the weights and randomize their masses
     public void ContinueToNextTest() {
         if (currentScenario == "HandSelection") {
+            currentScenario = "HeightCalibration";
+            // Disable the hand selection environment
+            handSelectionEnvironment.SetActive(false);
+            // Enable the height calibration environment
+            heightCalibrationEnvironment.SetActive(true);
+            DataPersistenceManager.instance.SetConditionName(currentScenario);
+            handSelected = true;
+        } else if (currentScenario == "HeightCalibration") {
             float cameraRigHeight = cameraRig.localPosition.y;
-            Debug.Log("Camera rig height: " + cameraRigHeight);
             // Set the height of all environments to 0.3 below the camera rig height
             handSelectionEnvironment.transform.position = new Vector3(handSelectionEnvironment.transform.position.x, cameraRigHeight + 0.35f, handSelectionEnvironment.transform.position.z);
             liftTutorialEnvironment.transform.position = new Vector3(liftTutorialEnvironment.transform.position.x, cameraRigHeight + 0.35f, liftTutorialEnvironment.transform.position.z);
@@ -171,12 +176,11 @@ public class SceneController : MonoBehaviour
             twoWeightsEnvironment.transform.position = new Vector3(twoWeightsEnvironment.transform.position.x, cameraRigHeight + 0.355f, twoWeightsEnvironment.transform.position.z);
             milkCartonEnvironment.transform.position = new Vector3(milkCartonEnvironment.transform.position.x, cameraRigHeight + 0.35f, milkCartonEnvironment.transform.position.z);
             currentScenario = "LiftTutorial";
-            // Disable the HandSelectionEnvironment game object
-            handSelectionEnvironment.SetActive(false);
+            // Disable the HeightCalibrationEnvironment game object
+            heightCalibrationEnvironment.SetActive(false);
             // Enable the LiftTutorialEnvironment game object
             liftTutorialEnvironment.SetActive(true);
             DataPersistenceManager.instance.SetConditionName(currentScenario);
-            handSelected = true;
         } else if (currentScenario == "LiftTutorial") {
             currentScenario = "SixWeights";
             // Disable the LiftTutorialEnvironment game object

@@ -52,13 +52,15 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
         if (velocityLimitEnabled && interactable && interactable.IsGrabbed)
         {
-            if (!startPositionSet) {
+            if (!startPositionSet)
+            {
                 startPosition = transform.position;
                 startPositionSet = true;
             }
 
             // Check if the weight is outside the origin position limits where the weight cannot be dropped
-            if (isOutsideOriginLimit) {
+            if (isOutsideOriginLimit)
+            {
                 // Get the list of grabbing interactors
                 IReadOnlyList<InteractorFacade> grabbingInteractors = interactable.GrabbingInteractors;
                 // Iterate through the grabbing interactors to see if any of them are moving too fast
@@ -72,7 +74,8 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
                     float currentVelocityYMagnitude = currentVelocity.y;
                     // If the current velocity y magnitude is greater than the max velocity, ungrab the interactable
                     // Positive velocity only happens on the way up, so you cannot drop it while going down
-                    if (currentVelocityYMagnitude > maxVelocity) {
+                    if (currentVelocityYMagnitude > maxVelocity)
+                    {
                         // interactable.Ungrab(interactor);
                         interactor.Ungrab();
                         IncrementWeightDroppedCounter();
@@ -81,23 +84,31 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
                         break;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 Debug.Log("IN ELSE: checking distance from origin...");
                 CheckDistanceFromOrigin();
             }
 
         }
         // Add the current position to the trajectory data
-        if (currentTrajectoryData != null && interactable && interactable.IsGrabbed) {
+        if (currentTrajectoryData != null && interactable && interactable.IsGrabbed)
+        {
             currentTrajectoryData.AddTrajectoryPoint(transform.position);
         }
     }
 
-    public void CalculateMaxVelocity() {
-        if (usePaperValues) {
-            if (interactableRigidbody.mass > 9.83f) {
+    public void CalculateMaxVelocity()
+    {
+        if (usePaperValues)
+        {
+            if (interactableRigidbody.mass > 9.83f)
+            {
                 maxVelocity = (1.9f / interactableRigidbody.mass + 0.06f);
-            } else if (interactableRigidbody.mass > 2.36f) {
+            }
+            else if (interactableRigidbody.mass > 2.36f)
+            {
                 // speedLimit = ((2 / (interactableRigidbody.mass))+0.1f); works good
                 //speedLimit = ((1.5f / (interactableRigidbody.mass))+0.07f); // works good as well. A bit frustrating but I managed to get the first four scenes correct
                 //speedLimit = ((2.3f / (interactableRigidbody.mass))+0.07f); // used for user study1
@@ -106,34 +117,44 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
                 //speedLimit = (1.9f / interactableRigidbody.mass + 0.06f); // prototype 3A
                 //speedLimit = (-0.08f * interactableRigidbody.mass + 1.1f); // combining linear
                 maxVelocity = (-0.08f * interactableRigidbody.mass + 1.05f); // combining linear
-            } else {
+            }
+            else
+            {
                 maxVelocity = (-0.8f * interactableRigidbody.mass + 2.75f); // prototype 3A or cobining linear
                 //speedLimit = (-1.8f * interactableRigidbody.mass + 3.6f);
             }
-        } else {
-            maxVelocity = (1/(Mathf.Log(interactableRigidbody.mass + 1, 10))) - 0.5f;
+        }
+        else
+        {
+            maxVelocity = (1 / (Mathf.Log(interactableRigidbody.mass + 1, 10))) - 0.5f;
         }
         Debug.Log("max velocity: " + maxVelocity);
     }
 
-    private void CalculateAngularDrag() {
-        if (velocityLimitEnabled) {
-            interactableRigidbody.angularDrag = (0.5f * (interactableRigidbody.mass*interactableRigidbody.mass));
+    private void CalculateAngularDrag()
+    {
+        if (velocityLimitEnabled)
+        {
+            interactableRigidbody.angularDrag = (0.5f * (interactableRigidbody.mass * interactableRigidbody.mass));
         }
     }
 
-    private void CheckDistanceFromOrigin() {
-        if (velocityLimitEnabled) {
+    private void CheckDistanceFromOrigin()
+    {
+        if (velocityLimitEnabled)
+        {
             Vector3 distance = transform.position - startPosition;
             // Debug.Log("distance: " + distance);
-            if (Mathf.Abs(distance.y) > 0.057f || Mathf.Abs(distance.x) > 0.057f || Mathf.Abs(distance.z) > 0.057f) {
+            if (Mathf.Abs(distance.y) > 0.057f || Mathf.Abs(distance.x) > 0.057f || Mathf.Abs(distance.z) > 0.057f)
+            {
                 // Debug.Log("outside origin limit");
                 isOutsideOriginLimit = true;
             }
         }
     }
 
-    public void ResetData() {
+    public void ResetData()
+    {
         dropCount = 0;
         pickUpCount = 0;
         platformIndex = -1;
@@ -142,19 +163,23 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
         Debug.Log("resetting data, mass: " + mass);
     }
 
-    private void IncrementWeightDroppedCounter() {
+    private void IncrementWeightDroppedCounter()
+    {
         dropCount++;
     }
 
-    public int GetWeightDroppedCounter() {
+    public int GetWeightDroppedCounter()
+    {
         return dropCount;
     }
 
-    public void IncrementWeightPickedUpCounter() {
+    public void IncrementWeightPickedUpCounter()
+    {
         pickUpCount++;
     }
 
-    public int GetWeightPickedUpCounter() {
+    public int GetWeightPickedUpCounter()
+    {
         return pickUpCount;
     }
 
@@ -165,25 +190,31 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "WeightPlacementCollider") {
+        if (other.gameObject.tag == "WeightPlacementCollider")
+        {
             // Get the platform index from the WeightPlacementCollider script
-            platformIndex = other.gameObject.GetComponent<WeightPlacementCollider>().GetPlatformIndex(); 
+            platformIndex = other.gameObject.GetComponent<WeightPlacementCollider>().GetPlatformIndex();
             Debug.Log("colliding with weight placement collider, platform index: " + platformIndex);
         }
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "WeightPlacementCollider") {
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "WeightPlacementCollider")
+        {
+            Debug.Log("exiting weight placement collider");
             platformIndex = -1;
         }
     }
 
-    public void CreateTrajectoryData() {
+    public void CreateTrajectoryData()
+    {
         currentTrajectoryData = new TrajectoryData();
         trajectoryData.Add(currentTrajectoryData);
     }
 
-    public void AddCurrentTrajectoryDataToList() {
+    public void AddCurrentTrajectoryDataToList()
+    {
         trajectoryData.Add(currentTrajectoryData);
     }
-}   
+}

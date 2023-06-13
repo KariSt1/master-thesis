@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SceneController : MonoBehaviour
 {
-    private string currentScenario = "HandSelection";
+    private string currentScenario = "SixWeights";
     private int currentTestNumber = 1;
     [SerializeField] GameObject handSelectionEnvironment;
     [SerializeField] GameObject heightCalibrationEnvironment;
@@ -21,13 +22,26 @@ public class SceneController : MonoBehaviour
     [SerializeField] TwoWeightUICounter twoWeightUICounter;
 
     // Whether hand selection has been confirmed
-    private bool handSelected = false;
+    private bool handSelected = true;
 
     // Which hand is selcted
-    private string selectedHand = "";
+    private string selectedHand = "Right";
 
     // Array for six weights scenario
     public GameObject[] sixWeights;
+
+    // Array for the placement cubes in the 6-weight scenario
+    public GameObject[] sixWeightsPlacementCubes;
+
+    // Array for number canvases for the 6-weight scenario
+    public TextMeshProUGUI[] sixWeightsNumberCanvases;
+
+    // Correct, incorrect materials
+    public Material correctMaterial;
+    public Material incorrectMaterial;
+
+    // Normal material
+    public Material normalMaterial;
 
     // Array for two weights scenario
     public GameObject[] twoWeights;
@@ -52,6 +66,14 @@ public class SceneController : MonoBehaviour
         // RandomizeMasses();
         // Set the condition name in the data persistence manager
         DataPersistenceManager.instance.SetConditionName(currentScenario);
+        DataPersistenceManager.instance.SetHand("Right");
+        DataPersistenceManager.instance.UpdateWeightObjects();
+        foreach (GameObject weight in sixWeights)
+        {
+            weight.GetComponent<RespawnWeight>().Respawn();
+        }
+        // Randomize the masses of the weights
+        RandomizeMasses();
     }
 
     public void RandomizeMasses()
@@ -230,12 +252,39 @@ public class SceneController : MonoBehaviour
             DataPersistenceManager.instance.SetConditionName(currentScenario);
             DataPersistenceManager.instance.SaveData();
             // Six weights test is done
-            currentScenario = "TwoWeights";
+            currentScenario = "CheckingIfCorrect";
             // Set the condition name in the data persistence manager
             // Disable the SixWeightsEnvironment game object
-            sixWeightsEnvironment.SetActive(false);
+            // sixWeightsEnvironment.SetActive(false);
             // Enable the TwoWeightsEnvironment game object
-            twoWeightsEnvironment.SetActive(true);
+            // twoWeightsEnvironment.SetActive(true);
+
+            // Check if each weight is in the correct position
+            for (int i = 0; i < sixWeights.Length; i++)
+            {
+                // check CheckIfCorrectPlacement method in DropOnFastLift script
+                (int correct, int placement) checkTuple = (sixWeights[i].GetComponent<DropOnFastLift>().CheckIfCorrectPlacement());
+                Debug.Log("!!!!!!!!!!!!!! " + checkTuple.correct + " " + checkTuple.placement + " !!!!!!!!!!!!!");
+                // if correct, change material to green on the placement object
+                if (checkTuple.placement != -1) {
+                    if (checkTuple.correct == checkTuple.placement) {
+                        sixWeightsPlacementCubes[checkTuple.placement - 1].GetComponent<Renderer>().material = correctMaterial;
+                    } else {
+                        sixWeightsPlacementCubes[checkTuple.placement - 1].GetComponent<Renderer>().material = incorrectMaterial;
+                    }
+                    if (checkTuple.correct != -1) {
+                        sixWeightsNumberCanvases[checkTuple.placement - 1].text = checkTuple.correct.ToString();
+                    }
+                }
+            }
+            
+        }
+        else if (currentScenario == "CheckingIfCorrect") {
+            currentScenario = "SixWeights";
+            for (int i=0; i< sixWeightsPlacementCubes.Length; i++) {
+                sixWeightsPlacementCubes[i].GetComponent<Renderer>().material = normalMaterial;
+                sixWeightsNumberCanvases[i].text = "";
+            }
             DataPersistenceManager.instance.SetConditionName(currentScenario);
             DataPersistenceManager.instance.UpdateWeightObjects();
             currentTestNumber++;

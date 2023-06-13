@@ -217,4 +217,30 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     {
         trajectoryData.Add(currentTrajectoryData);
     }
+
+    public (int, int) CheckIfCorrectPlacement() {
+        int correctPlacement = -1;
+        int placementPlatform = -1;
+        Debug.Log("!!!!!!!!!mass: " + mass);
+        if (mass == 1) {
+            correctPlacement = 1;
+            placementPlatform = platformIndex;
+        } else if (mass == 3) {
+            correctPlacement = 2;
+            placementPlatform = platformIndex;
+        } else if (mass == 5) {
+            correctPlacement = 3;
+            placementPlatform = platformIndex;
+        } else if (mass == 7) {
+            correctPlacement = 4;
+            placementPlatform = platformIndex;
+        } else if (mass == 9) {
+            correctPlacement = 5;
+            placementPlatform = platformIndex;
+        } else {
+            correctPlacement = 6;
+            placementPlatform = platformIndex;
+        }
+        return (correctPlacement, placementPlatform);
+    }
 }

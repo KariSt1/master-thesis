@@ -92,11 +92,11 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
             }
 
         }
-        // Add the current position to the trajectory data
-        if (currentTrajectoryData != null && interactable && interactable.IsGrabbed)
-        {
-            currentTrajectoryData.AddTrajectoryPoint(transform.position);
-        }
+        // // Add the current position to the trajectory data
+        // if (currentTrajectoryData != null && interactable && interactable.IsGrabbed)
+        // {
+        //     currentTrajectoryData.AddTrajectoryPoint(transform.position);
+        // }
     }
 
     public void CalculateMaxVelocity()

@@ -43,13 +43,9 @@ public class SceneController : MonoBehaviour
     private int[] randomizeOrder = new int[30];
     private int twoWeightTestIndex = 0;
 
-    // public DataPersistenceManager dataPersistenceManager;
-
     // Start is called before the first frame update
     void Start()
     {
-        // // Randomize the masses of the weights
-        // RandomizeMasses();
         // Set the condition name in the data persistence manager
         DataPersistenceManager.instance.SetConditionName(currentScenario);
     }
@@ -231,11 +227,11 @@ public class SceneController : MonoBehaviour
             DataPersistenceManager.instance.SaveData();
             // Six weights test is done
             currentScenario = "TwoWeights";
-            // Set the condition name in the data persistence manager
             // Disable the SixWeightsEnvironment game object
             sixWeightsEnvironment.SetActive(false);
             // Enable the TwoWeightsEnvironment game object
             twoWeightsEnvironment.SetActive(true);
+            // Set the condition name in the data persistence manager
             DataPersistenceManager.instance.SetConditionName(currentScenario);
             DataPersistenceManager.instance.UpdateWeightObjects();
             currentTestNumber++;
@@ -262,7 +258,6 @@ public class SceneController : MonoBehaviour
         }
         else if (currentScenario == "MilkCarton")
         {
-            // DataPersistenceManager.instance.SetConditionName(currentScenario);
             // Milk carton test is done and the experiment is done
 #if UNITY_EDITOR
                 // Application.Quit() does not work in the editor so
@@ -305,7 +300,6 @@ public class SceneController : MonoBehaviour
         if (!handSelected)
         {
             DataPersistenceManager.instance.SetHand("Left");
-            // Disable the game object
             leftInteractor.SetActive(true);
             rightInteractor.SetActive(false);
             selectedHand = "Left";

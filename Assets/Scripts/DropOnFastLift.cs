@@ -17,7 +17,7 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     private Vector3 startPosition;
     private bool isOutsideOriginLimit = false;
 
-    // TODO: Remove this, this is a toggle between my values for maxVelocity and the values from Emma's paper
+    // this is a toggle between my values for maxVelocity and the values from Emma's paper
     public bool usePaperValues = false;
 
     // Is velocity limiting enabled
@@ -101,7 +101,7 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
 
     public void CalculateMaxVelocity()
     {
-        if (usePaperValues)
+        if (usePaperValues) // Emma Bäckström's values
         {
             if (interactableRigidbody.mass > 9.83f)
             {
@@ -109,26 +109,17 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
             }
             else if (interactableRigidbody.mass > 2.36f)
             {
-                // speedLimit = ((2 / (interactableRigidbody.mass))+0.1f); works good
-                //speedLimit = ((1.5f / (interactableRigidbody.mass))+0.07f); // works good as well. A bit frustrating but I managed to get the first four scenes correct
-                //speedLimit = ((2.3f / (interactableRigidbody.mass))+0.07f); // used for user study1
-                //speedLimit = (4/(interactableRigidbody.mass+0.45f)-0.1f); //wip
-                // 4/(x+0.9)-0.2 //wip
-                //speedLimit = (1.9f / interactableRigidbody.mass + 0.06f); // prototype 3A
-                //speedLimit = (-0.08f * interactableRigidbody.mass + 1.1f); // combining linear
                 maxVelocity = (-0.08f * interactableRigidbody.mass + 1.05f); // combining linear
             }
             else
             {
                 maxVelocity = (-0.8f * interactableRigidbody.mass + 2.75f); // prototype 3A or cobining linear
-                //speedLimit = (-1.8f * interactableRigidbody.mass + 3.6f);
             }
         }
-        else
+        else // My values
         {
             maxVelocity = (1 / (Mathf.Log(interactableRigidbody.mass + 1, 10))) - 0.5f;
         }
-        Debug.Log("max velocity: " + maxVelocity);
     }
 
     private void CalculateAngularDrag()
@@ -144,10 +135,8 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
         if (velocityLimitEnabled)
         {
             Vector3 distance = transform.position - startPosition;
-            // Debug.Log("distance: " + distance);
             if (Mathf.Abs(distance.y) > 0.057f || Mathf.Abs(distance.x) > 0.057f || Mathf.Abs(distance.z) > 0.057f)
             {
-                // Debug.Log("outside origin limit");
                 isOutsideOriginLimit = true;
             }
         }
@@ -194,7 +183,6 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
         {
             // Get the platform index from the WeightPlacementCollider script
             platformIndex = other.gameObject.GetComponent<WeightPlacementCollider>().GetPlatformIndex();
-            Debug.Log("colliding with weight placement collider, platform index: " + platformIndex);
         }
     }
 
@@ -202,7 +190,6 @@ public class DropOnFastLift : MonoBehaviour, IDataPersistence
     {
         if (other.gameObject.tag == "WeightPlacementCollider")
         {
-            Debug.Log("exiting weight placement collider");
             platformIndex = -1;
         }
     }
